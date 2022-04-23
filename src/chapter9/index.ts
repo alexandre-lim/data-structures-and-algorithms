@@ -50,3 +50,23 @@ export class Linter {
     return closingBrace !== { '(': ')', '[': ']', '{': '}' }[openingBrace];
   }
 }
+
+export class Queue<T> {
+  private data: T[] = [];
+
+  enqueue(element: T) {
+    this.data.push(element);
+  }
+
+  dequeue() {
+    return this.data.shift();
+  }
+
+  read() {
+    return this.data[0];
+  }
+
+  size() {
+    return this.data.length;
+  }
+}

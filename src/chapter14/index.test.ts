@@ -1,4 +1,4 @@
-import { CustomNode, LinkedList } from '.';
+import { CustomNode, LinkedList, Queue } from '.';
 
 test('CustomNode class', () => {
   const nodeOne = new CustomNode('once');
@@ -12,6 +12,22 @@ test('CustomNode class', () => {
 
   expect(nodeTwo.nextNode).toEqual(nodeThree);
   expect(nodeFour.nextNode).toBeNull();
+});
+
+test('CustomNode class with previousNode', () => {
+  const nodeOne = new CustomNode('Bob');
+  const nodeTwo = new CustomNode('Jill');
+  const nodeThree = new CustomNode('Emily');
+
+  nodeOne.nextNode = nodeTwo;
+  nodeTwo.previousNode = nodeOne;
+  nodeTwo.nextNode = nodeThree;
+  nodeThree.previousNode = nodeTwo;
+
+  expect(nodeOne.previousNode).toBeNull();
+  expect(nodeOne.nextNode).toEqual(nodeTwo);
+  expect(nodeTwo.previousNode).toEqual(nodeOne);
+  expect(nodeThree.nextNode).toBeNull();
 });
 
 test('LinkedList', () => {
@@ -62,4 +78,41 @@ test('LinkedList', () => {
   list.deleteAtIndex(0);
   expect(list.indexOf('red')).toBeNull();
   expect(list.read(0)).toBe('once');
+});
+
+describe('new Queue with DoublyLinkedList', () => {
+  it('should read first element', () => {
+    const queue = new Queue<number>();
+    queue.enqueue(1);
+    queue.enqueue(2);
+
+    expect(queue.read()).toBe(1);
+    expect(queue.dequeue()).toBe(1);
+    expect(queue.read()).toBe(2);
+  });
+
+  it('should read next element after dequeue', () => {
+    const queue = new Queue<number>();
+    queue.enqueue(1);
+    queue.enqueue(2);
+    queue.enqueue(3);
+
+    expect(queue.read()).toBe(1);
+    expect(queue.dequeue()).toBe(1);
+
+    expect(queue.read()).toBe(2);
+    expect(queue.dequeue()).toBe(2);
+
+    expect(queue.read()).toBe(3);
+    expect(queue.dequeue()).toBe(3);
+
+    expect(queue.read()).toBeNull();
+  });
+
+  it('should return null on read and dequeue when queue is empty', () => {
+    const queue = new Queue<string>();
+
+    expect(queue.read()).toBeNull();
+    expect(queue.dequeue()).toBeNull();
+  });
 });

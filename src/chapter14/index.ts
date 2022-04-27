@@ -1,6 +1,7 @@
 export class CustomNode<T> {
   private _data: T;
   private _nextNode: CustomNode<T> | null = null;
+  private _previousNode: CustomNode<T> | null = null;
 
   constructor(data: T) {
     this._data = data;
@@ -16,6 +17,14 @@ export class CustomNode<T> {
 
   public get nextNode(): CustomNode<T> | null {
     return this._nextNode;
+  }
+
+  public set previousNode(node: CustomNode<T> | null) {
+    this._previousNode = node;
+  }
+
+  public get previousNode(): CustomNode<T> | null {
+    return this._previousNode;
   }
 }
 
@@ -96,5 +105,57 @@ export class LinkedList<T> {
 
     const nodeAfterDeletedNode = currentNode.nextNode?.nextNode ?? null;
     currentNode.nextNode = nodeAfterDeletedNode;
+  }
+}
+
+export class DoublyLinkedList<T> {
+  private _firstNode: CustomNode<T> | null;
+  private _lastNode: CustomNode<T> | null;
+
+  constructor(firstNode: CustomNode<T> | null = null, lastNode: CustomNode<T> | null = null) {
+    this._firstNode = firstNode;
+    this._lastNode = lastNode;
+  }
+
+  public get firstNode() {
+    return this._firstNode;
+  }
+
+  public insertAtEnd(value: T) {
+    const newNode = new CustomNode(value);
+
+    if (!this._firstNode) {
+      this._firstNode = newNode;
+      this._lastNode = newNode;
+    } else {
+      newNode.previousNode = this._lastNode;
+      this._lastNode ? (this._lastNode.nextNode = newNode) : null;
+      this._lastNode = newNode;
+    }
+  }
+
+  public removeFromFront() {
+    if (!this._firstNode) return null;
+    const removedNode = this._firstNode;
+    this._firstNode = this._firstNode?.nextNode;
+    return removedNode;
+  }
+}
+
+export class Queue<T> {
+  private _data: DoublyLinkedList<T> = new DoublyLinkedList();
+
+  public enqueue(value: T) {
+    this._data.insertAtEnd(value);
+  }
+
+  public dequeue() {
+    const removedNode = this._data.removeFromFront();
+    return removedNode?.data ?? null;
+  }
+
+  public read() {
+    if (!this._data.firstNode) return null;
+    return this._data.firstNode.data;
   }
 }

@@ -1,8 +1,8 @@
 {
-  "name": "typescript-starter",
+  "name": "typescript-data-structures-and-algorithms",
   "private": true,
   "version": "1.0.0",
-  "description": "Typescript starter",
+  "description": "A companion to the book A Common-Sense Guide to Data Structures and Algorithms by Jay Wengrow written in Typescript",
   "author": "Alexandre Lim",
   "license": "ISC",
   "scripts": {

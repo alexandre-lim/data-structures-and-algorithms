@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/37420129/165598445-dad219e7-1d13-4dd2-94cf-085b92a44385.jpeg" alt="Book A Common-Sense Guide to Data Structures and Algorithms by Jay Wengrow"/>
+</p>
+<br/>
+
 This repository aims to be a companion to the book [A Common-Sense Guide to Data Structures and Algorithms](https://pragprog.com/titles/jwdsal2/a-common-sense-guide-to-data-structures-and-algorithms-second-edition/) by **Jay Wengrow.** I rewrote most of the data structures and algorithms found in the book in **Typescript.** Practicing what you read is another way to learn. I made it for myself and decided to share it publicly.
 
 **It's not production-ready. The tests are not exhaustive. They are mostly there for documentation on how to use things.** It's a just start to dig deeper into data structures and algorithms.

@@ -58,13 +58,98 @@ describe('TreeNode', () => {
 
   it('should return the found node or null on search', () => {
     expect(root?.search(15, root)).toBeNull();
-    expect(root?.search(61, root)?.value).toBe(61);
+    expect(root?.search(61, root)).toBeTruthy();
   });
 
   it('should insert new node', () => {
-    expect(root?.search(45, root)?.value).toBeUndefined();
+    expect(root?.search(45, root)).toBeNull();
+
     root?.insert(45, root);
+
     expect(root?.search(45, root)?.value).toBe(45);
     expect(root?.leftChild?.rightChild?.rightChild?.rightChild?.value).toBe(45);
+  });
+
+  it('should delete a node with no children', () => {
+    expect(root?.search(4, root)).toBeTruthy();
+
+    root?.delete(4, root);
+
+    expect(root?.search(4, root)).toBeNull();
+  });
+
+  it('should delete a node with one child and plug the child into the spot where the deleted node was', () => {
+    expect(root?.search(4, root)).toBeTruthy();
+    expect(root?.search(25, root)?.leftChild?.value).toBe(10);
+
+    root?.delete(4, root);
+    root?.delete(10, root);
+
+    expect(root?.search(4, root)).toBeNull();
+    expect(root?.search(10, root)).toBeNull();
+
+    expect(root?.search(25, root)?.leftChild?.value).toBe(11);
+    expect(root?.search(11, root)?.leftChild).toBeNull();
+    expect(root?.search(11, root)?.rightChild).toBeNull();
+  });
+
+  it('should delete a node with two children and replace the deleted node with the successor node', () => {
+    expect(root?.search(56, root)).toBeTruthy();
+    expect(root?.search(75, root)?.leftChild?.value).toBe(56);
+
+    root?.delete(56, root);
+
+    expect(root?.search(56, root)).toBeNull();
+    expect(root?.search(75, root)?.leftChild?.value).toBe(61);
+    expect(root?.search(61, root)?.leftChild?.value).toBe(52);
+
+    expect(root?.value).toBe(50);
+
+    root?.delete(50, root);
+
+    expect(root?.value).toBe(52);
+    expect(root?.search(61, root)?.leftChild).toBeNull();
+  });
+
+  it('should delete a node with two children and replace the deleted node with the successor node and manage the former right child of successor node', () => {
+    expect(root?.search(56, root)).toBeTruthy();
+    expect(root?.search(75, root)?.leftChild?.value).toBe(56);
+
+    root?.delete(56, root);
+
+    expect(root?.search(56, root)).toBeNull();
+    expect(root?.search(75, root)?.leftChild?.value).toBe(61);
+    expect(root?.search(61, root)?.leftChild?.value).toBe(52);
+
+    root?.insert(55, root);
+
+    expect(root?.value).toBe(50);
+
+    root?.delete(50, root);
+
+    expect(root?.value).toBe(52);
+    expect(root?.search(61, root)?.leftChild?.value).toBe(55);
+  });
+
+  it('should traverse the tree in ascending order', () => {
+    expect(root?.traverseInAscendingOrder(root)).toMatchInlineSnapshot(`
+      Array [
+        4,
+        10,
+        11,
+        25,
+        30,
+        33,
+        40,
+        50,
+        52,
+        56,
+        61,
+        75,
+        82,
+        89,
+        95,
+      ]
+    `);
   });
 });

@@ -13,6 +13,10 @@ export class TreeNode<T> {
     return this._value;
   }
 
+  public set value(value: T) {
+    this._value = value;
+  }
+
   public get leftChild() {
     return this._leftChild;
   }
@@ -51,5 +55,50 @@ export class TreeNode<T> {
         this.insert(value, node.rightChild);
       }
     }
+  }
+
+  // One of the most complex algorithm from the book
+  // To see what happens: Set a breakpoint and use VS Code JavaScript Debug Terminal to enter debug mode
+  public delete(valueToDelete: T, node: TreeNode<T> | null) {
+    if (node === null) return null;
+
+    if (valueToDelete < node.value) {
+      node.leftChild = this.delete(valueToDelete, node.leftChild);
+      return node;
+    }
+
+    if (valueToDelete > node.value) {
+      node.rightChild = this.delete(valueToDelete, node.rightChild);
+      return node;
+    }
+
+    if (valueToDelete === node.value) {
+      if (node.leftChild === null) return node.rightChild;
+      if (node.rightChild === null) return node.leftChild;
+
+      node.rightChild = this.lift(node.rightChild, node);
+      return node;
+    }
+    return node;
+  }
+
+  private lift(node: TreeNode<T>, nodeToDelete: TreeNode<T>) {
+    if (node.leftChild) {
+      node.leftChild = this.lift(node.leftChild, nodeToDelete);
+      return node;
+    }
+
+    nodeToDelete.value = node.value;
+    return node.rightChild;
+  }
+
+  // This function is presented differently in the book but I kept the intention
+  public traverseInAscendingOrder(node: TreeNode<T> | null, result: Array<T> = []) {
+    if (node === null) return;
+
+    this.traverseInAscendingOrder(node.leftChild, result);
+    result.push(node.value);
+    this.traverseInAscendingOrder(node.rightChild, result);
+    return result;
   }
 }

@@ -5,7 +5,7 @@ export class SortableArray {
     this._array = array;
   }
 
-  public get array(): number[] {
+  public get array(): ReadonlyArray<number> {
     return this._array;
   }
 

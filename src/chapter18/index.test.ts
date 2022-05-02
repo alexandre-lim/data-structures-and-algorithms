@@ -1,4 +1,4 @@
-import { Vertex } from '.';
+import { Vertex, City, WeightedGraphVertex, dijkstraShortestPath } from '.';
 
 describe('Graph using Vertex class', () => {
   const alice = new Vertex('Alice');
@@ -76,4 +76,67 @@ describe('Graph using Vertex class', () => {
       ]
     `);
   });
+});
+
+test('WeightedGraph', () => {
+  const dallas = new WeightedGraphVertex('Dallas');
+  const toronto = new WeightedGraphVertex('Toronto');
+
+  dallas.addAdjacentVertex(toronto, 138);
+  toronto.addAdjacentVertex(dallas, 216);
+
+  for (const [vertex, weight] of dallas.routes) {
+    expect(vertex.value).toBe('Toronto');
+    expect(weight).toBe(138);
+  }
+});
+
+test('Dijkstra shortest path', () => {
+  const atlanta = new City('Atlanta');
+  const boston = new City('Boston');
+  const chicago = new City('Chicago');
+  const denver = new City('Denver');
+  const elPaso = new City('El Paso');
+
+  atlanta.addRoute(boston, 100);
+  atlanta.addRoute(denver, 160);
+
+  boston.addRoute(chicago, 120);
+  boston.addRoute(denver, 180);
+
+  chicago.addRoute(elPaso, 80);
+
+  denver.addRoute(chicago, 40);
+  denver.addRoute(elPaso, 140);
+
+  // Shortest path with cheapest price from Atlanta to El Paso
+  const [cheapestPriceTable, cheapestPreviousStopoverCityTable, shortestPath] = dijkstraShortestPath(atlanta, elPaso);
+
+  expect(cheapestPriceTable).toMatchInlineSnapshot(`
+    Object {
+      "Atlanta": 0,
+      "Boston": 100,
+      "Chicago": 200,
+      "Denver": 160,
+      "El Paso": 280,
+    }
+  `);
+
+  expect(cheapestPreviousStopoverCityTable).toMatchInlineSnapshot(`
+    Object {
+      "Boston": "Atlanta",
+      "Chicago": "Denver",
+      "Denver": "Atlanta",
+      "El Paso": "Chicago",
+    }
+  `);
+
+  expect(shortestPath).toMatchInlineSnapshot(`
+    Array [
+      "Atlanta",
+      "Denver",
+      "Chicago",
+      "El Paso",
+    ]
+  `);
 });
